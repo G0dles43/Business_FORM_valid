@@ -7,6 +7,8 @@ import { EditInterestComponent } from '../edit-interest/edit-interest.component'
 import { KebaCasePipe } from '../keba-case.pipe';
 import { DatePlPipe } from '../date-pl.pipe';
 import { InterestService } from '../interest.service';
+import { duplicateInterestValidator } from '../duplicate-interest.validator';
+
 
 @Component({
   selector: 'app-business-card',
@@ -33,14 +35,14 @@ export class BusinessCardComponent {
     interstService.InterestAsync.subscribe(interestFromTable=>this.interests = interestFromTable);
   }
 
-  selectInterest(which:number):void{
-      this.selected=which;
+  selectInterest(which: number): void {
+    this.selected = which;
   }
-
-  doEdit():void{
-    //this.interests[this.selected]=newValue;
-    this.selected=-1;
+  
+  doEdit(): void {
+    this.selected = -1;
   }
+  
 
   
 }

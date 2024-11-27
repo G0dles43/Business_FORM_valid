@@ -14,7 +14,7 @@ export class ManageInterestsComponent {
   @Input() selected: number | undefined;
   
 
-  selectInterestInChild(which:number):void{
+  selectInterestInChild(which: number): void {
     this.selectInterestInParent.emit(which);
   }
 }

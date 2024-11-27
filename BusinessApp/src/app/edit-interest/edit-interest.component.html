@@ -8,14 +8,15 @@
 
 
             <form [formGroup]="formModel" (ngSubmit)='submitForm()'>
-                <input type="text" formControlName="valueForEdit">
+                <input type="text" formControlName="valueForEdit">                 
                 @if(formModel.controls['valueForEdit'].errors?.['required']){
                     <span class="error">Value is required</span>
                 }@else if(formModel.controls['valueForEdit'].errors?.['minlength']!=null){
                     <span class="error">Min length is {{formModel.controls['valueForEdit'].errors?.['minlength']['requiredLength']}}</span>
                 }@else if(formModel.controls['valueForEdit'].errors?.['lettersValidator']!=null){
                     <span class="error">Must contain only letters</span>
-                }
+                }@else if(formModel.controls['valueForEdit'].errors?.['duplicateInterest']) {
+                    <span class="error">This interest already exists in the list.</span>} 
                 
                 
                 <input [disabled]="!formModel.valid" type="submit" value="Send">

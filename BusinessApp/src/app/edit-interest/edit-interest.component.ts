@@ -3,6 +3,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { CommonModule } from '@angular/common';
 import { InterestService } from '../interest.service';
 import { lettersValidator } from '../letters-validator';
+import { duplicateInterestValidator } from '../duplicate-interest.validator';
 
 @Component({
   selector: 'app-edit-interest',
@@ -29,12 +30,17 @@ export class EditInterestComponent {
   formModel: FormGroup;
 
   
- constructor(private interestService:InterestService){
-  this.formModel = new FormGroup({
-    valueForEdit: new FormControl('',[Validators.required,Validators.minLength(2), lettersValidator])
-    
-  });
- }
+  constructor(private interestService: InterestService) {
+    this.formModel = new FormGroup({
+      valueForEdit: new FormControl('', [
+        Validators.required,
+        Validators.minLength(2),
+        lettersValidator,
+        duplicateInterestValidator(this.interestService.Interest.filter((_, index) => index !== this.position)) // Wyklucz bieżące zainteresowanie
+      ])
+    });
+  }
+  
 
  ngOnInit(){
   this.formModel.setValue({valueForEdit: this.oldValue});
@@ -50,16 +56,17 @@ export class EditInterestComponent {
   }
 
 
-  submitForm(){
-    console.log('form',this.formModel.value.valueForEdit);
-    if(this.position!==undefined){
-      let newValue=this.formModel.value.valueForEdit;
-      console.log('new value',newValue,this.formModel.value.valueForEdit);
-      this.interestService.editInterest(this.position,this.formModel.value.valueForEdit);
+  submitForm() {
+    if (this.formModel.valid) {
+      const newValue = this.formModel.value.valueForEdit;
+      if (this.position !== undefined) {
+        this.interestService.editInterest(this.position, newValue);
+      }
+      this.doEditInParent.emit();
     }
-      
-    this.doEditInParent.emit();
   }
+  
+  
 
   cancel(){
     this.doEditInParent.emit(this.editValue);
